@@ -122,18 +122,13 @@ LOGIN_URL = '/accounts/login/'
 
 # Security settings for production
 if not DEBUG:
-    # Security settings
+    # Basic security settings (without HTTPS redirects for Railway)
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_REDIRECT_EXEMPT = []
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    
-    # Force HTTPS
-    USE_TLS = True
+    # Remove HTTPS redirect settings that cause issues on Railway
+    # SECURE_SSL_REDIRECT = True  # Commented out
+    # SESSION_COOKIE_SECURE = True  # Commented out  
+    # CSRF_COOKIE_SECURE = True  # Commented out
 
 # Email settings (optional - for password reset, etc.)
 if not DEBUG:
