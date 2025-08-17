@@ -1,0 +1,1 @@
+web: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn jobby_project.wsgi:application

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}My Applications - JOBBY{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2><i class="fas fa-file-alt"></i> My Job Applications</h2>
+        <hr>
+        
+        {% if applications %}
+            {% for application in applications %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">{{ application.job.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ application.job.company }}</h6>
+                            <p class="card-text">{{ application.job.description|truncatewords:20 }}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ application.job.location }} | 
+                                <i class="fas fa-calendar"></i> Applied {{ application.applied_at|date:"M d, Y" }} |
+                                <i class="fas fa-clock"></i> {{ application.job.job_type|title }}
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-{% if application.status == 'pending' %}warning{% elif application.status == 'accepted' %}success{% elif application.status == 'rejected' %}danger{% else %}info{% endif %} mb-2">
+                                {{ application.status|title }}
+                            </span>
+                            
+                            {% if application.job.salary_min and application.job.salary_max %}
+                            <div>
+                                <small class="text-success">
+                                    ${{ application.job.salary_min|floatformat:0 }} - ${{ application.job.salary_max|floatformat:0 }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if application.cover_letter %}
+                    <hr>
+                    <div class="mb-2">
+                        <strong>Your Cover Letter:</strong>
+                        <p class="text-muted mt-1">{{ application.cover_letter|truncatewords:30 }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'job_detail' application.job.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> View Job
+                        </a>
+                        
+                        {% if application.cover_letter %}
+                        <button class="btn btn-outline-info btn-sm" data-bs-toggle="collapse" data-bs-target="#cover-letter-{{ application.id }}">
+                            <i class="fas fa-file-text"></i> View Full Cover Letter
+                        </button>
+                        {% endif %}
+                    </div>
+                    
+                    {% if application.cover_letter %}
+                    <div class="collapse mt-3" id="cover-letter-{{ application.id }}">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6>Your Cover Letter</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ application.cover_letter|linebreaks }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info text-center">
+                <h4><i class="fas fa-info-circle"></i> No Applications Yet</h4>
+                <p>You haven't applied for any jobs yet. Browse available jobs and start applying!</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

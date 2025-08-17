@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - JOBBY{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user"></i> My Profile</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Account Type:</strong> 
+                            <span class="badge bg-primary">{{ profile.user_type|title }}</span>
+                        </p>
+                        <p><strong>Phone:</strong> {{ profile.phone|default:"Not provided" }}</p>
+                        <p><strong>Member Since:</strong> {{ user.date_joined|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+                
+                {% if profile.user_type == 'jobseeker' %}
+                <hr>
+                <div class="mb-3">
+                    <strong>Resume:</strong>
+                    {% if profile.resume %}
+                        <a href="{{ profile.resume.url }}" class="btn btn-sm btn-outline-primary ms-2" target="_blank">
+                            <i class="fas fa-file-pdf"></i> View Resume
+                        </a>
+                    {% else %}
+                        <span class="text-muted">No resume uploaded</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Jobs</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
