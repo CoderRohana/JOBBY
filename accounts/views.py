@@ -17,6 +17,10 @@ def signup(request):
             login(request, user)
             messages.success(request, 'Account created successfully!')
             return redirect('home')
+        else:
+            # Print errors for debugging
+            print("Form errors:", form.errors)
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})

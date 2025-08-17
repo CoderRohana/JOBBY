@@ -10,17 +10,28 @@
                 <h3><i class="fas fa-sign-in-alt"></i> Login to JOBBY</h3>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.errors }}
+                    </div>
+                    {% endif %}
+
                     <div class="mb-3">
                         <label for="id_username" class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" required>
+                        <input type="text" class="form-control" name="username" id="id_username" required>
                     </div>
                     <div class="mb-3">
                         <label for="id_password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" required>
+                        <input type="password" class="form-control" name="password" id="id_password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                    {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    {% endif %}
                 </form>
                 <hr>
                 <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
